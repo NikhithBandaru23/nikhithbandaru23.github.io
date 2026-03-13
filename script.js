@@ -175,3 +175,89 @@ if (form) {
 document.body.style.opacity = '0';
 document.body.style.transition = 'opacity .4s';
 window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+
+/* ══════════════════════════════════════
+   BUBBLE CURSOR
+══════════════════════════════════════ */
+(function() {
+  // Create bubble elements
+  const bubble = document.createElement('div');
+  bubble.id = 'bubble-cursor';
+  document.body.appendChild(bubble);
+
+  const ball = document.createElement('div');
+  ball.id = 'bubble-ball';
+  document.body.appendChild(ball);
+
+  // Target mouse position
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+
+  // Bubble (outer ring) — slow lag
+  let bx = mouseX, by = mouseY;
+
+  // Ball (inner dot) — faster, offset inside bubble
+  let ballX = mouseX, ballY = mouseY;
+
+  // Offset: ball floats inside bubble slightly toward cursor direction
+  let velX = 0, velY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Hover effect on interactive elements
+  const interactiveEls = 'a, button, input, textarea, .g, .proj-card, .int-item, .tool-card';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(interactiveEls)) {
+      bubble.classList.add('hovering');
+      ball.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(interactiveEls)) {
+      bubble.classList.remove('hovering');
+      ball.classList.remove('hovering');
+    }
+  });
+
+  function animateCursor() {
+    // Bubble ring follows mouse with soft lag
+    bx += (mouseX - bx) * 0.10;
+    by += (mouseY - by) * 0.10;
+    bubble.style.left = bx + 'px';
+    bubble.style.top  = by + 'px';
+
+    // Ball follows mouse faster, with a slight gravity-like offset
+    // giving the "floating ball inside bubble" feel
+    const dx = mouseX - bx;
+    const dy = mouseY - by;
+
+    // Ball leans inside bubble toward the cursor direction (max offset ~12px)
+    const maxOffset = 12;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const offsetX = dist > 0 ? (dx / dist) * Math.min(dist * 0.5, maxOffset) : 0;
+    const offsetY = dist > 0 ? (dy / dist) * Math.min(dist * 0.5, maxOffset) : 0;
+
+    ballX += (bx + offsetX - ballX) * 0.18;
+    ballY += (by + offsetY - ballY) * 0.18;
+
+    ball.style.left = ballX + 'px';
+    ball.style.top  = ballY + 'px';
+
+    requestAnimationFrame(animateCursor);
+  }
+
+  animateCursor();
+
+  // Hide on mouse leave, show on enter
+  document.addEventListener('mouseleave', () => {
+    bubble.style.opacity = '0';
+    ball.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    bubble.style.opacity = '1';
+    ball.style.opacity = '1';
+  });
+})();

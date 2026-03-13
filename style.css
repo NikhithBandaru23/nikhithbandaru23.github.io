@@ -532,3 +532,72 @@ footer span { color: var(--c1); }
   .skills-cat-grid { grid-template-columns: 1fr; }
   .contact-form-card { padding: 22px 18px; }
 }
+
+/* ══════════════════════════════════════
+   BUBBLE CURSOR
+══════════════════════════════════════ */
+* { cursor: none !important; }
+
+#bubble-cursor {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  /* outer glass bubble ring */
+  background: rgba(0, 212, 255, 0.06);
+  border: 1.5px solid rgba(0, 212, 255, 0.5);
+  box-shadow:
+    0 0 12px rgba(0, 212, 255, 0.3),
+    0 0 30px rgba(0, 212, 255, 0.1),
+    inset 0 0 12px rgba(0, 212, 255, 0.08);
+  backdrop-filter: blur(2px);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+#bubble-cursor.hovering {
+  width: 70px;
+  height: 70px;
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.8);
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.5),
+    0 0 50px rgba(0, 212, 255, 0.2),
+    inset 0 0 16px rgba(0, 212, 255, 0.12);
+}
+
+#bubble-ball {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(0, 212, 255, 0.8));
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.4);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+#bubble-ball.hovering {
+  width: 14px;
+  height: 14px;
+}
+
+/* shine on bubble */
+#bubble-cursor::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 22%;
+  width: 30%;
+  height: 20%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  filter: blur(2px);
+  transform: rotate(-30deg);
+}
